@@ -1,0 +1,40 @@
+1
+Judicata, Inc.
+330 Townsend St, Suite 240
+San Francisco, CA 94107
+2
+Judicata, Inc.
+330 Townsend St, Suite 240
+SF, CA
+3
+Judicata, Inc.
+330 Townsend St, Suite 240
+94107
+4
+Barack Obama
+1600 Pennsylvania Ave
+Washington, DC
+5
+Barack Obama
+1600 Pennsylvania Ave NW
+Washington, DC 20500
+6
+Judicata, Inc.
+330 Townsend St, Suite 240
+San Francisco, CA 94107
+7
+Judicata, Inc.
+330 Townsend St, Suite 240
+San Francisco, CA 94107-1659
+8
+Postal Customer
+330 Townsend Street #240
+San Francisco, CA 94107-1659
+9
+Joe Biden
+1 Observatory Cir NW
+Washington, DC 20008-3619
+10
+Diamond Joe
+1 Observatory Circle
+Washington, DC

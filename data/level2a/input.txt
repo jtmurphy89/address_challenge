@@ -1,0 +1,44 @@
+1
+Barack Obama
+1600 Pennsylvania Ave
+Washington, DC 20500
+2
+Barack Obama
+1600 Pennsylvania Avenue
+Washington, DC 20500
+3
+Barack Obama
+1600 Pennsylvania Av
+Washington, DC 20500
+4
+Judicata, Inc.
+330 Townsend St, Suite 240
+San Francisco, CA 94107
+5
+Judicata, Inc.
+330 Townsend Street, Suite 240
+San Francisco, CA 94107
+6
+Judicata, Inc.
+330 TOWNSEND STREET, SUITE 240
+San Francisco, CA 94107
+7
+Joe Biden
+1 Observatory Circle
+Washington, DC 20008
+8
+Joe Biden
+1 Observatory Cir
+Washington, DC 20008
+9
+AT&T Park
+24 Willie Mays Plaza
+San Francisco, CA 94107
+10
+AT&T Park
+24 Willie Mays Plz
+San Francisco, CA 94107
+11
+Wilson Sonsini Goodrich & Rosati
+139 Townsend Street, Suite 150
+San Francisco, CA 94404

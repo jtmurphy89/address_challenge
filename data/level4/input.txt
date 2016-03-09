@@ -1,0 +1,396 @@
+1
+AT&T Park
+24 Willie Mays Plaza
+San Francisco, CA 94107
+2
+AT&T Park
+24 Willie Mays Plz
+San Francisco, CA 94107
+3
+Barack Obama
+1600 Pennsylvania Av
+Washington, DC 20500
+4
+Barack Obama
+1600 Pennsylvania Ave
+Washington, DC
+5
+Barack Obama
+1600 Pennsylvania Ave
+Washington, DC 20500
+6
+Barack Obama
+1600 Pennsylvania Ave NW
+Washington, DC 20500
+7
+Barack Obama
+1600 Pennsylvania Ave.
+Washington, DC 20500
+8
+Barack Obama
+1600 Pennsylvania Avenue
+Washington DC
+9
+Barack Obama
+1600 Pennsylvania Avenue
+Washington DC 20500
+10
+Barack Obama
+1600 Pennsylvania Avenue
+Washington, DC 20500
+11
+Barack Obama
+The White House
+Washington, DC
+12
+Ben Klein
+1324 Pine St
+San Francisco, CA
+13
+Ben Klein
+1324 Pine St, #3
+San Francisco, CA
+14
+Ben Klein
+1324 Pine St, Apartment 3
+San Francisco, CA
+15
+Best to check your fields
+So that a haiku will fail
+Your validation
+16
+Celine Wu
+777 SE Martin Luther King Jr Boulevard
+Portland, OR
+17
+Diamond Joe
+1 Observatory Circle
+Washington, DC
+18
+Homer Simpson
+742 Evergreen Terr
+Springfield, USA
+19
+Homer Simpson
+742 Evergreen Terrace
+Springfield, USA
+20
+JUDICATA
+330 TOWNSEND ST STE 240
+SAN FRANCISCO CA 94107-1659
+21
+JUDICATA
+330 TOWNSEND ST, SUITE 240
+SAN FRANCISCO CA 94107
+22
+James Smith
+433 Kearny St
+San Francisco, CA 94108-2803
+23
+James Smith
+433 Kerny St
+San Francisco, CA 94108-2803
+24
+Jennifer Lunds
+120 Kern St
+San Francisco, CA 94131
+25
+Jim Smith
+433 Kearny St
+San Francisco, CA 94108
+26
+Joe Biden
+1 Observatory Cir
+Washington, DC 20008
+27
+Joe Biden
+1 Observatory Cir NW
+Washington, DC 20008-3619
+28
+Joe Biden
+1 Observatory Circle
+Washington, DC 20008
+29
+Joe Biden
+One Observatory Circle
+Washington, DC 20008
+30
+John Dexter
+110A Chattanooga St
+San Francisco, CA 94114
+31
+Judicata
+330 Townsend St
+San Francisco, CA 94107
+32
+Judicata
+330 Townsend Street #240
+San Francisco, CA
+33
+Judicata, Inc.
+330 TOWNSEND STREET, SUITE 240
+San Francisco, CA 94107
+34
+Judicata, Inc.
+330 Townsend St
+San Francisco, CA 94107
+35
+Judicata, Inc.
+330 Townsend St, Suite 240
+94107
+36
+Judicata, Inc.
+330 Townsend St, Suite 240
+SF, CA
+37
+Judicata, Inc.
+330 Townsend St, Suite 240
+San Francisco CA 94107
+38
+Judicata, Inc.
+330 Townsend St, Suite 240
+San Francisco, CA 94107
+39
+Judicata, Inc.
+330 Townsend St, Suite 240
+San Francisco, CA 94107-1659
+40
+Judicata, Inc.
+330 Townsend St, Suite 240
+San Francisco, CA 94109
+41
+Judicata, Inc.
+330 Townsend St., Suite 240
+San Francisco, CA 94107
+42
+Judicata, Inc.
+330 Townsend Street, #240
+San Francisco, CA 94107-1659
+43
+Judicata, Inc.
+330 Townsend Street, Suite 240
+San Francisco CA 94107
+44
+Judicata, Inc.
+330 Townsend Street, Suite 240
+San Francisco, CA 94107
+45
+Judith Roth
+777 Southeast Martin Luther King Junior Boulevard
+Portland, OR
+46
+Mark Smith
+110B Chattanooga St
+San Francisco, CA 94114
+47
+Mr. Klein
+1324 Pine St
+San Francisco, CA
+48
+Mr. Klein
+1324 Pine St, Apt 5
+San Francisco, CA
+49
+Ms. Lunds
+120 Kern St
+San Francisco, CA 94131
+50
+Ms. Wu
+777 SE Martin Luther King Jr Blvd
+Portland, OR
+51
+O'Melveny & Myers
+1625 I St NW
+Washington, DC
+52
+O'Melveny & Myers LLP
+1625 Eye St NW
+Washington, DC 20006
+53
+O'Melveny & Myers LLP
+1625 I St NW
+Washington, DC 20006
+54
+Oregon Convention Center
+777 MLK Jr. Blvd.
+Portland, OR
+55
+Oregon Convention Center
+777 NE MLK Jr. Blvd.
+Portland, OR 97232
+56
+Oregon Convention Center
+777 NE Martin Luther King Jr Blvd
+Portland, OR 97232
+57
+Oregon Convention Center
+777 NE Martin Luther King, Junior Blvd
+Portland, OR 97232
+58
+POSTAL CUSTOMER
+1324 Pine St, Apt 5
+San Francisco, CA
+59
+Postal Customer
+1625 Eye St NW
+Washington, DC 20006
+60
+Postal Customer
+330 Townsend Street #240
+San Francisco, CA 94107-1659
+61
+Postal Customer
+777 Martin Luther King Junior Boulevard
+Portland, OR
+62
+Postal Customer
+777 Southeast Martin Luther King Junior Boulevard
+Portland, OR
+63
+Resident
+330 Townsend St
+San Francisco, CA 94107
+64
+Rickhouse
+246 Kearny
+San Francisco, CA
+65
+Rickhouse
+246 Kearny St
+San Francisco, CA 94108
+66
+Rickhouse
+246 Kearny Street
+San Francisco, CA 94108
+67
+Ryan Klein
+1060 Bush St
+San Francisco, CA
+68
+Ryan Klein
+1324 Pine St # 5
+San Francisco, CA 94109
+69
+Ryan Klein
+1324 Pine St #5
+San Francisco, CA 94109
+70
+Ryan Klein
+1324 Pine St Apt 5
+San Francisco, CA 94109
+71
+Ryan Klein
+1324 Pine St, Apt 5
+San Francisco, CA
+72
+Ryan Klein
+1324 Pine St, Apt 5
+San Francisco, CA 94109
+73
+Ryan Klein
+1324 Pine Street Unit 5
+San Francisco, CA
+74
+Ryan Klein
+PO Box 15658
+Stanford, CA 94309
+75
+Ryan Klein
+Post Office Box 15658
+Stanford, CA 94309
+76
+SFFD
+36 Bluxome St
+San Francisco, CA 94107
+77
+SFFD
+849 Ave D
+San Francisco, CA 94130
+78
+SFFD
+849 D Avenue
+San Francisco, CA
+79
+Saks Fifth Avenue
+611 5th Av
+New York, NY 10022
+80
+Saks Fifth Avenue
+611 5th Ave
+New York, NY 10022
+81
+Saks Fifth Avenue
+611 Fifth Avenue
+New York, NY 10022
+82
+Samantha Abrams
+1324 Pine St Apt 2
+San Francisco, CA 94109
+83
+Samantha Abrams
+1324 Pine St, Apartment 2
+San Francisco, CA 94109
+84
+San Francisco Fire Department
+849 Avenue D
+San Francisco, CA 94130
+85
+Santa Claus
+Workshop
+North Pole
+86
+The White House
+
+Washington, DC
+87
+The White House
+1600 Pennsylvania Avenue
+Washington, DC 20500
+88
+Treasure Island Flea
+1 Avenue of the Palms
+San Francisco, CA 94130
+89
+Treasure Island Flea
+One Avenue of the Palms
+San Francisco, CA 94130
+90
+UNIVERSAL PARTS
+330 TOWNSEND ST STE 206
+SAN FRANCISCO CA 94107-1659
+91
+Universal Parts
+330 Townsend St Ste 206
+San Francisco, CA 94107
+92
+Universal Parts
+330 Townsend St, Suite 206
+San Francisco, CA 94107
+93
+Universal Parts
+330 Townsend Street
+San Francisco, CA 94107
+94
+Universal Parts, Inc.
+330 Townsend St, Suite 206
+San Francisco, CA 94107
+95
+WSGR
+139 TOWNSEND ST STE 150
+SAN FRANCISCO CA 94404
+96
+Wilson Sonsini Goodrich & Rosati
+139 Townsend St, Suite 150
+San Francisco, CA
+97
+Wilson Sonsini Goodrich & Rosati
+139 Townsend St, Suite 150
+San Francisco, CA 94404
+98
+Wilson Sonsini Goodrich & Rosati
+139 Townsend Street, Suite 150
+San Francisco CA
+99
+Wilson Sonsini Goodrich & Rosati
+139 Townsend Street, Suite 150
+San Francisco, CA 94404
