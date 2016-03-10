@@ -8,4 +8,13 @@ def bundle_mail(letters):
     - Every Letter is placed in exactly one Bundle
     - The destination of the Bundle matches the address of the Letter
     """
-    return []
+
+    # create dict of address:bundle pairs
+    bundle_dict = {}
+    for letter in letters:
+    	addy = letter.address
+    	bundle = bundle_dict.get(addy, Bundle(addy))
+    	bundle.add_letter(letter)
+    	bundle_dict[addy] = bundle
+
+    return bundle_dict.values()
