@@ -153,7 +153,7 @@ class AddressParser(object):
     def make_address(self):
         line1 = self.name.strip()
         line2 = str(self.street_num + ' ' + self.street_name + ' ' +
-                    street_dict.get(self.street_type[0], '') + ' ' + self.apt_num).strip()
+                    street_dict.get(self.street_type[0] if self.street_type else '', '') + ' ' + self.apt_num).strip()
         line3 = str(self.city + ' ' + state_dict.get(self.state, '') +
                     ' ' + self.federal_district + ' ' + self.zip_code).strip()
         return Address(line1, line2, line3)
@@ -163,8 +163,8 @@ class AddressParser(object):
             return True
         if not self.city and not self.state and not self.federal_district:
             return True
-        # if self.name in bad_names:
-        #     return True
+        if self.name in bad_names:
+            return True
         return False
 
 
@@ -191,8 +191,6 @@ class AddressRepairer(object):
                 parsed_address.city = good_address.city
                 parsed_address.state = good_address.state
                 parsed_address.federal_district = good_address.federal_district
-        #     return parsed_address
-        # return parsed_address
 
     def repair_name(self, parsed_address):
         for good_address in self.good_addresses:
