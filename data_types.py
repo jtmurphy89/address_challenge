@@ -1,4 +1,5 @@
 import re
+from difflib import SequenceMatcher
 
 base_regex = '(?P<remainder>.*){junk}\s?(?P<base>{base_query})'
 street_num_regex = '(?P<street_num>\d+)\s(?P<remainder>.*)'
@@ -8,10 +9,22 @@ zip_regex = '(?P<remainder>.*)\s(?P<zip_code>\d+)'
 apt_types = ['Suite', 'Ste', 'Room', 'Apartment', 'Apt', '#', 'Unit']
 street_types = ['Ave?n?u?e?', 'Pla?za?', 'Str?e?e?t?', 'Circ?l?e?']
 state_list = ['CALIFORNIA', 'CA']
+bad_names = ['POSTAL CUSTOMER']
 
+name_dict = {'WILSON SONSINI GOODRICH  ROSATI': 'WSGR', 'DIAMOND JOE': 'JOE BIDEN'}
+city_abbreviations = {'SF': 'SAN FRANCISCO'}
 state_dict = {'CALIFORNIA': 'CA', 'CA': 'CA'}
 street_dict = {'A': 'AVE', 'P': 'PLZ', 'S': 'ST', 'C': 'CIR'}
-name_junk = ['INC', 'LLC', ',', '.']
+
+normal_junk = [',', '.']
+street_junk = ['NW']
+name_junk = ['INC', 'LLC', '&']
+
+
+def remove_junk(name, junk):
+    for piece_of_junk in junk:
+        name = name.replace(piece_of_junk, '').strip()
+    return name
 
 
 class Address(object):
@@ -78,9 +91,9 @@ RETURN_TO_SENDER = Address('RETURN_TO_SENDER',
 class AddressParser(object):
     def __init__(self, line1, line2, line3):
         # initialize the name and everything else to none
-        self.name = line1.upper()
-        self.line2remainder = line2.upper().replace(',', '').replace('.', '').strip()
-        self.line3remainder = line3.upper().replace(',', '').replace('.', '').strip()
+        self.name = remove_junk(line1.upper(), normal_junk + name_junk)
+        self.line2remainder = remove_junk(line2.upper(), normal_junk + street_junk)
+        self.line3remainder = remove_junk(line3.upper(), normal_junk)
         self.street_num = ''
         self.apt_num = ''
         self.street_type = ''
@@ -90,9 +103,9 @@ class AddressParser(object):
         self.state = ''
         self.city = ''
 
-        # remove junk from name
-        for junk in name_junk:
-            self.name = self.name.replace(junk, '').strip()
+        # make sure name isn't an exception
+        if self.name in name_dict:
+            self.name = name_dict[self.name]
 
         # street num
         street_num_match = re.match(street_num_regex, self.line2remainder, re.IGNORECASE)
@@ -118,7 +131,7 @@ class AddressParser(object):
                 self.street_name = regex_match.group('remainder').strip()
 
         # zip code
-        zip_code_regex = base_regex.format(junk='\s', base_query='\d+')
+        zip_code_regex = '(?P<remainder>.*)(?P<base>\d\d\d\d\d)(?:-\d+)*'
         zip_code_match = re.match(zip_code_regex, self.line3remainder, re.IGNORECASE)
         if zip_code_match:
             self.zip_code = zip_code_match.group('base')
@@ -130,20 +143,29 @@ class AddressParser(object):
             regex_match = re.match(regex, self.line3remainder, re.IGNORECASE)
             if regex_match:
                 self.state = regex_match.group('base')
-                self.line3remainder = regex_match.group('remainder')
+                self.line3remainder = regex_match.group('remainder').strip()
 
         if self.line3remainder == 'WASHINGTON DC':
             self.federal_district = 'WASHINGTON DC'
         else:
-            self.city = self.line3remainder
+            self.city = city_abbreviations.get(self.line3remainder, self.line3remainder)
 
     def make_address(self):
-        line1 = self.name
+        line1 = self.name.strip()
         line2 = str(self.street_num + ' ' + self.street_name + ' ' +
                     street_dict.get(self.street_type[0], '') + ' ' + self.apt_num).strip()
         line3 = str(self.city + ' ' + state_dict.get(self.state, '') +
                     ' ' + self.federal_district + ' ' + self.zip_code).strip()
         return Address(line1, line2, line3)
+
+    def is_bad_egg(self):
+        if not self.zip_code:
+            return True
+        if not self.city and not self.state and not self.federal_district:
+            return True
+        # if self.name in bad_names:
+        #     return True
+        return False
 
 
 class AddressRepairer(object):
@@ -155,11 +177,24 @@ class AddressRepairer(object):
 
     def repair_zip(self, parsed_address):
         for good_address in self.good_addresses:
-            city_match = parsed_address.city == good_address.city
-            state_match = parsed_address.state == good_address.state
-            fd_match = parsed_address.federal_district == good_address.federal_district
-            street_match = parsed_address.make_address().line2 == good_address.make_address().line2
-            if city_match and state_match and fd_match and street_match:
+            match = (parsed_address.city == good_address.city and
+                     parsed_address.state == good_address.state and
+                     parsed_address.federal_district == good_address.federal_district and
+                     parsed_address.make_address().line2 == good_address.make_address().line2)
+            if match:
                 parsed_address.zip_code = good_address.zip_code
-                return parsed_address
-        return parsed_address
+                print 'match found for zip code!'
+
+    def repair_city_state_given_zip(self, parsed_address):
+        for good_address in self.good_addresses:
+            if parsed_address.zip_code == good_address.zip_code:
+                parsed_address.city = good_address.city
+                parsed_address.state = good_address.state
+                parsed_address.federal_district = good_address.federal_district
+        #     return parsed_address
+        # return parsed_address
+
+    def repair_name(self, parsed_address):
+        for good_address in self.good_addresses:
+            if parsed_address.make_address().line2 == good_address.make_address().line2:
+                parsed_address.name = good_address.name
