@@ -1,29 +1,4 @@
 from data_types import *
-import re
-
-abbreviations = {'A':'AVENUE', 'S':'STREET', 'C':'CIRCLE', 'P':'PLAZA' }
-
-
-def canonicalize_address(addy):
-	""" Given an address, returns a standard, reformatted address in all caps 
-		with no abbreviations in the street name nor any distinction b/t Apt, 
-		Suite, #, etc.
-
-	 """
-	m = re.match(r"""
-		(?P<street_num>[0-9]+)\s   # it should have a street number
-		(?P<street_name>\w+\s?\w+?)\s   # the street name could possibly have 2 words in it
-		(?P<street_type>\w+)[.]?[,]?\s?   # the street type could possibly be followed by a period or a comma or a space
-		(?P<room_type>\w*)\s?   # there may or may not be a room type (or even a room number)
-		(?P<room_num>\w*)""", addy.line2.upper(), re.VERBOSE).groupdict()
-	
-	# un-abbreviate the street type in standard format and strip away any blank spaces at the end
-	m['street_type'] = abbreviations[m['street_type'][0]]
-	new_line2 = '{street_num} {street_name} {street_type} {room_num}'.format(**m).strip()
-	return Address(addy.line1.upper(), new_line2, addy.line3.upper())
-
-	
-
 
 
 def bundle_mail(letters):
@@ -35,26 +10,31 @@ def bundle_mail(letters):
     """
 
     bundle_dict = {}
+    repairer = AddressRepairer()
+    bad_eggs = []
     for letter in letters:
-    	addy = canonicalize_address(letter.address)
-    	bundle = bundle_dict.get(addy, Bundle(addy))
-    	bundle.add_letter(letter)
-    	bundle_dict[addy] = bundle
+        line1 = letter.address.line1
+        line2 = letter.address.line2
+        line3 = letter.address.line3
+        addy = AddressParser(line1, line2, line3)
+        if not addy.zip_code:
+            bad_eggs.append([letter, addy])
+        else:
+            address = str(addy.make_address())
+            bundle = bundle_dict.get(address, Bundle(address))
+            bundle.add_letter(letter)
+            bundle_dict[address] = bundle
+            repairer.add_good_address(line1, line2, line3)
 
+    for (bad_letter, bad_addy) in bad_eggs:
+        if not bad_addy.zip_code:
+            addy = str(repairer.repair_zip(bad_addy).make_address())
+            bundle = bundle_dict.get(addy, Bundle(addy))
+            bundle.add_letter(bad_letter)
+            bundle_dict[addy] = bundle
+            repairer.add_good_address(line1, line2, line3)
 
     for bundle in bundle_dict.values():
-    	bundle.address = list(bundle.letters)[0].address
+        bundle.address = list(bundle.letters)[0].address
 
     return bundle_dict.values()
-
-
-
-
-
-
-
-
-
-
-
-
