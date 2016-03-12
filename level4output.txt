@@ -1,0 +1,210 @@
+Barack Obama	The White House	Washington, DC
+
+	Letter id: 11	Barack Obama	The White House	Washington, DC
+
+Jim Smith	433 Kearny St	San Francisco, CA 94108
+
+	Letter id: 25	Jim Smith	433 Kearny St	San Francisco, CA 94108
+	Letter id: 22	James Smith	433 Kearny St	San Francisco, CA 94108-2803
+	Letter id: 23	James Smith	433 Kerny St	San Francisco, CA 94108-2803
+
+Barack Obama	1600 Pennsylvania Av	Washington, DC 20500
+
+	Letter id: 3	Barack Obama	1600 Pennsylvania Av	Washington, DC 20500
+	Letter id: 4	Barack Obama	1600 Pennsylvania Ave	Washington, DC
+	Letter id: 5	Barack Obama	1600 Pennsylvania Ave	Washington, DC 20500
+	Letter id: 6	Barack Obama	1600 Pennsylvania Ave NW	Washington, DC 20500
+	Letter id: 7	Barack Obama	1600 Pennsylvania Ave.	Washington, DC 20500
+	Letter id: 8	Barack Obama	1600 Pennsylvania Avenue	Washington DC
+	Letter id: 9	Barack Obama	1600 Pennsylvania Avenue	Washington DC 20500
+	Letter id: 10	Barack Obama	1600 Pennsylvania Avenue	Washington, DC 20500
+	Letter id: 87	The White House	1600 Pennsylvania Avenue	Washington, DC 20500
+
+SFFD	849 D Avenue	San Francisco, CA
+
+	Letter id: 78	SFFD	849 D Avenue	San Francisco, CA
+
+Oregon Convention Center	777 MLK Jr. Blvd.	Portland, OR
+
+	Letter id: 54	Oregon Convention Center	777 MLK Jr. Blvd.	Portland, OR
+
+Oregon Convention Center	777 NE Martin Luther King, Junior Blvd	Portland, OR 97232
+
+	Letter id: 57	Oregon Convention Center	777 NE Martin Luther King, Junior Blvd	Portland, OR 97232
+
+Mark Smith	110B Chattanooga St	San Francisco, CA 94114
+
+	Letter id: 46	Mark Smith	110B Chattanooga St	San Francisco, CA 94114
+
+Ryan Klein	1060 Bush St	San Francisco, CA
+
+	Letter id: 67	Ryan Klein	1060 Bush St	San Francisco, CA
+
+O'Melveny & Myers	1625 I St NW	Washington, DC
+
+	Letter id: 51	O'Melveny & Myers	1625 I St NW	Washington, DC
+	Letter id: 52	O'Melveny & Myers LLP	1625 Eye St NW	Washington, DC 20006
+	Letter id: 53	O'Melveny & Myers LLP	1625 I St NW	Washington, DC 20006
+
+Treasure Island Flea	1 Avenue of the Palms	San Francisco, CA 94130
+
+	Letter id: 88	Treasure Island Flea	1 Avenue of the Palms	San Francisco, CA 94130
+	Letter id: 89	Treasure Island Flea	One Avenue of the Palms	San Francisco, CA 94130
+
+Judith Roth	777 Southeast Martin Luther King Junior Boulevard	Portland, OR
+
+	Letter id: 45	Judith Roth	777 Southeast Martin Luther King Junior Boulevard	Portland, OR
+
+Judicata	330 Townsend Street #240	San Francisco, CA
+
+	Letter id: 32	Judicata	330 Townsend Street #240	San Francisco, CA
+	Letter id: 33	Judicata, Inc.	330 TOWNSEND STREET, SUITE 240	San Francisco, CA 94107
+	Letter id: 34	Judicata, Inc.	330 Townsend St	San Francisco, CA 94107
+	Letter id: 35	Judicata, Inc.	330 Townsend St, Suite 240	94107
+	Letter id: 36	Judicata, Inc.	330 Townsend St, Suite 240	SF, CA
+	Letter id: 37	Judicata, Inc.	330 Townsend St, Suite 240	San Francisco CA 94107
+	Letter id: 38	Judicata, Inc.	330 Townsend St, Suite 240	San Francisco, CA 94107
+	Letter id: 39	Judicata, Inc.	330 Townsend St, Suite 240	San Francisco, CA 94107-1659
+	Letter id: 40	Judicata, Inc.	330 Townsend St, Suite 240	San Francisco, CA 94109
+	Letter id: 41	Judicata, Inc.	330 Townsend St., Suite 240	San Francisco, CA 94107
+	Letter id: 42	Judicata, Inc.	330 Townsend Street, #240	San Francisco, CA 94107-1659
+	Letter id: 43	Judicata, Inc.	330 Townsend Street, Suite 240	San Francisco CA 94107
+	Letter id: 44	Judicata, Inc.	330 Townsend Street, Suite 240	San Francisco, CA 94107
+	Letter id: 20	JUDICATA	330 TOWNSEND ST STE 240	SAN FRANCISCO CA 94107-1659
+	Letter id: 21	JUDICATA	330 TOWNSEND ST, SUITE 240	SAN FRANCISCO CA 94107
+	Letter id: 60	Postal Customer	330 Townsend Street #240	San Francisco, CA 94107-1659
+	Letter id: 31	Judicata	330 Townsend St	San Francisco, CA 94107
+
+UNIVERSAL PARTS	330 TOWNSEND ST STE 206	SAN FRANCISCO CA 94107-1659
+
+	Letter id: 90	UNIVERSAL PARTS	330 TOWNSEND ST STE 206	SAN FRANCISCO CA 94107-1659
+	Letter id: 91	Universal Parts	330 Townsend St Ste 206	San Francisco, CA 94107
+	Letter id: 92	Universal Parts	330 Townsend St, Suite 206	San Francisco, CA 94107
+	Letter id: 93	Universal Parts	330 Townsend Street	San Francisco, CA 94107
+	Letter id: 94	Universal Parts, Inc.	330 Townsend St, Suite 206	San Francisco, CA 94107
+
+Saks Fifth Avenue	611 5th Ave	New York, NY 10022
+
+	Letter id: 80	Saks Fifth Avenue	611 5th Ave	New York, NY 10022
+	Letter id: 79	Saks Fifth Avenue	611 5th Av	New York, NY 10022
+
+SFFD	36 Bluxome St	San Francisco, CA 94107
+
+	Letter id: 76	SFFD	36 Bluxome St	San Francisco, CA 94107
+
+Postal Customer	777 Martin Luther King Junior Boulevard	Portland, OR
+
+	Letter id: 61	Postal Customer	777 Martin Luther King Junior Boulevard	Portland, OR
+
+John Dexter	110A Chattanooga St	San Francisco, CA 94114
+
+	Letter id: 30	John Dexter	110A Chattanooga St	San Francisco, CA 94114
+
+Jennifer Lunds	120 Kern St	San Francisco, CA 94131
+
+	Letter id: 24	Jennifer Lunds	120 Kern St	San Francisco, CA 94131
+	Letter id: 49	Ms. Lunds	120 Kern St	San Francisco, CA 94131
+
+San Francisco Fire Department	849 Avenue D	San Francisco, CA 94130
+
+	Letter id: 84	San Francisco Fire Department	849 Avenue D	San Francisco, CA 94130
+	Letter id: 77	SFFD	849 Ave D	San Francisco, CA 94130
+
+The White House		Washington, DC
+
+	Letter id: 86	The White House		Washington, DC
+
+Ms. Wu	777 SE Martin Luther King Jr Blvd	Portland, OR
+
+	Letter id: 50	Ms. Wu	777 SE Martin Luther King Jr Blvd	Portland, OR
+
+Saks Fifth Avenue	611 Fifth Avenue	New York, NY 10022
+
+	Letter id: 81	Saks Fifth Avenue	611 Fifth Avenue	New York, NY 10022
+
+Oregon Convention Center	777 NE MLK Jr. Blvd.	Portland, OR 97232
+
+	Letter id: 55	Oregon Convention Center	777 NE MLK Jr. Blvd.	Portland, OR 97232
+
+Ryan Klein	PO Box 15658	Stanford, CA 94309
+
+	Letter id: 74	Ryan Klein	PO Box 15658	Stanford, CA 94309
+
+Wilson Sonsini Goodrich & Rosati	139 Townsend St, Suite 150	San Francisco, CA
+
+	Letter id: 96	Wilson Sonsini Goodrich & Rosati	139 Townsend St, Suite 150	San Francisco, CA
+	Letter id: 97	Wilson Sonsini Goodrich & Rosati	139 Townsend St, Suite 150	San Francisco, CA 94404
+	Letter id: 98	Wilson Sonsini Goodrich & Rosati	139 Townsend Street, Suite 150	San Francisco CA
+	Letter id: 99	Wilson Sonsini Goodrich & Rosati	139 Townsend Street, Suite 150	San Francisco, CA 94404
+	Letter id: 95	WSGR	139 TOWNSEND ST STE 150	SAN FRANCISCO CA 94404
+
+Celine Wu	777 SE Martin Luther King Jr Boulevard	Portland, OR
+
+	Letter id: 16	Celine Wu	777 SE Martin Luther King Jr Boulevard	Portland, OR
+
+Postal Customer	777 Southeast Martin Luther King Junior Boulevard	Portland, OR
+
+	Letter id: 62	Postal Customer	777 Southeast Martin Luther King Junior Boulevard	Portland, OR
+
+AT&T Park	24 Willie Mays Plaza	San Francisco, CA 94107
+
+	Letter id: 1	AT&T Park	24 Willie Mays Plaza	San Francisco, CA 94107
+	Letter id: 2	AT&T Park	24 Willie Mays Plz	San Francisco, CA 94107
+
+Mr. Klein	1324 Pine St, Apt 5	San Francisco, CA
+
+	Letter id: 48	Mr. Klein	1324 Pine St, Apt 5	San Francisco, CA
+	Letter id: 47	Mr. Klein	1324 Pine St	San Francisco, CA
+
+Oregon Convention Center	777 NE Martin Luther King Jr Blvd	Portland, OR 97232
+
+	Letter id: 56	Oregon Convention Center	777 NE Martin Luther King Jr Blvd	Portland, OR 97232
+
+RETURN_TO_SENDER	RETURN_TO_SENDER	RETURN_TO_SENDER
+
+	Letter id: 15	Best to check your fields	So that a haiku will fail	Your validation
+	Letter id: 18	Homer Simpson	742 Evergreen Terr	Springfield, USA
+	Letter id: 19	Homer Simpson	742 Evergreen Terrace	Springfield, USA
+	Letter id: 85	Santa Claus	Workshop	North Pole
+	Letter id: 59	Postal Customer	1625 Eye St NW	Washington, DC 20006
+	Letter id: 63	Resident	330 Townsend St	San Francisco, CA 94107
+
+Samantha Abrams	1324 Pine St Apt 2	San Francisco, CA 94109
+
+	Letter id: 82	Samantha Abrams	1324 Pine St Apt 2	San Francisco, CA 94109
+	Letter id: 83	Samantha Abrams	1324 Pine St, Apartment 2	San Francisco, CA 94109
+
+Diamond Joe	1 Observatory Circle	Washington, DC
+
+	Letter id: 17	Diamond Joe	1 Observatory Circle	Washington, DC
+	Letter id: 26	Joe Biden	1 Observatory Cir	Washington, DC 20008
+	Letter id: 27	Joe Biden	1 Observatory Cir NW	Washington, DC 20008-3619
+	Letter id: 28	Joe Biden	1 Observatory Circle	Washington, DC 20008
+	Letter id: 29	Joe Biden	One Observatory Circle	Washington, DC 20008
+
+Rickhouse	246 Kearny	San Francisco, CA
+
+	Letter id: 64	Rickhouse	246 Kearny	San Francisco, CA
+	Letter id: 65	Rickhouse	246 Kearny St	San Francisco, CA 94108
+	Letter id: 66	Rickhouse	246 Kearny Street	San Francisco, CA 94108
+
+Ben Klein	1324 Pine St	San Francisco, CA
+
+	Letter id: 12	Ben Klein	1324 Pine St	San Francisco, CA
+	Letter id: 13	Ben Klein	1324 Pine St, #3	San Francisco, CA
+	Letter id: 14	Ben Klein	1324 Pine St, Apartment 3	San Francisco, CA
+
+Ryan Klein	Post Office Box 15658	Stanford, CA 94309
+
+	Letter id: 75	Ryan Klein	Post Office Box 15658	Stanford, CA 94309
+
+Ryan Klein	1324 Pine St # 5	San Francisco, CA 94109
+
+	Letter id: 68	Ryan Klein	1324 Pine St # 5	San Francisco, CA 94109
+	Letter id: 69	Ryan Klein	1324 Pine St #5	San Francisco, CA 94109
+	Letter id: 70	Ryan Klein	1324 Pine St Apt 5	San Francisco, CA 94109
+	Letter id: 71	Ryan Klein	1324 Pine St, Apt 5	San Francisco, CA
+	Letter id: 72	Ryan Klein	1324 Pine St, Apt 5	San Francisco, CA 94109
+	Letter id: 73	Ryan Klein	1324 Pine Street Unit 5	San Francisco, CA
+	Letter id: 58	POSTAL CUSTOMER	1324 Pine St, Apt 5	San Francisco, CA
+
