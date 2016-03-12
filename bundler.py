@@ -17,7 +17,7 @@ def bundle_mail(letters):
 
     while letter_queue:
         letter, parsed_letter = letter_queue.popleft()
-        if parsed_letter.is_good_egg() or parsed_letter.repair_attempts > 10:
+        if parsed_letter.is_good_egg():
             repairer.validate_address(parsed_letter)
             standardized_address = parsed_letter.make_address()
             bundle = bundle_dict.get(standardized_address, Bundle(standardized_address))

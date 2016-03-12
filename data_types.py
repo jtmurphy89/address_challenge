@@ -1,5 +1,4 @@
 import re
-from difflib import SequenceMatcher
 
 base_regex = '(?P<remainder>.*){junk}\s?(?P<base>{base_query})'
 street_num_regex = '(?P<street_num>\d+)\s(?P<remainder>.*)'
@@ -7,7 +6,7 @@ apt_regex = '(?P<remainder>.*)\s{}\.?\s?(?P<apt_num>\d+)'
 zip_regex = '(?P<remainder>.*)\s(?P<zip_code>\d+)'
 
 apt_types = ['Suite', 'Ste', 'Room', 'Apartment', 'Apt', '#', 'Unit']
-street_types = ['Ave?n?u?e?', 'Pla?za?', 'Str?e?e?t?', 'Circ?l?e?']
+street_types = ['Ave?n?u?e?', 'Pla?za?', 'Str?e?e?t?', 'Circ?l?e?', 'Terrace']
 state_list = ['CALIFORNIA', 'CA', 'NY', 'OREGON', 'OR']
 bad_names = ['POSTAL CUSTOMER', 'RESIDENT']
 
@@ -20,7 +19,6 @@ name_dict = {'WILSON SONSINI GOODRICH  ROSATI': 'WSGR', 'DIAMOND JOE': 'JOE BIDE
              'SAN FRANCISCO FIRE DEPARTMENT': 'SFFD', 'JIM SMITH': 'JAMES SMITH',
              'MS LUNDS': 'JENNIFER LUNDS'}
 city_abbreviations = {'SF': 'SAN FRANCISCO'}
-
 
 state_dict = {'CALIFORNIA': 'CA', 'CA': 'CA', 'OREGON': 'OR', 'OR': 'OR', 'NEW YORK': 'NY', 'NY': 'NY'}
 street_dict = {'A': 'AVE', 'P': 'PLZ', 'S': 'ST', 'C': 'CIR'}
@@ -110,10 +108,7 @@ class AddressParser(object):
         self.zip_code = self.parse_zip_code()
         self.city, self.state, self.federal_district = self.parse_city_state_district()
         self.repair_attempts = 0
-        self.is_RTS = False
-
-        if self.street_name == 'TOWNSEND':
-            self.zip_code = '94107'
+        self.is_RTS = not self.zip_code and not self.state and not self.federal_district
 
     def parse_name(self, name):
         if name in name_dict:
@@ -193,9 +188,13 @@ class AddressParser(object):
         return Address(line1, line2, line3)
 
     def is_good_egg(self):
+        if self.is_RTS:
+            return True
+        if self.repair_attempts > 10:
+            return True
         if not self.zip_code:
             return False
-        if not self.city and not self.state and not self.federal_district:
+        if self.zip_code and not self.state and not self.federal_district:
             return False
         if self.name in bad_names:
             return False
@@ -207,9 +206,14 @@ class AddressParser(object):
 class AddressRepairer(object):
     def __init__(self):
         self.good_addresses = []
+        self.apt_num_checker = {}
+        self.zip_checker = {}
 
     def add_good_address(self, parsed_address):
         self.good_addresses.append(parsed_address)
+        street_lookup_key = str(
+            parsed_address.name + ' ' + parsed_address.street_num + ' ' + parsed_address.street_name)
+        self.apt_num_checker[street_lookup_key] = parsed_address
 
     def repair_address(self, parsed_address):
         if not parsed_address.zip_code:
@@ -254,7 +258,8 @@ class AddressRepairer(object):
         parsed_address.repair_attempts += 1
 
     def validate_address(self, parsed_address):
-        if not parsed_address.state and not parsed_address.federal_district:
-            parsed_address.is_RTS = True
-
-
+        apt_num_lookup = str(parsed_address.name + ' ' + parsed_address.street_num + ' ' + parsed_address.street_name)
+        if apt_num_lookup in self.apt_num_checker:
+            parsed_address.apt_num = self.apt_num_checker[apt_num_lookup].apt_num
+            parsed_address.street_type = self.apt_num_checker[apt_num_lookup].street_type
+            parsed_address.zip_code = self.apt_num_checker[apt_num_lookup].zip_code

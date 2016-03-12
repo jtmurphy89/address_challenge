@@ -1,14 +1,13 @@
 from data_types import *
-line1 = 'Wilson Sonsini Goodrich & Rosati'.replace(',','').replace('.','').upper()
-line2 = '139 Townsend St, Suite 150'.replace(',','').replace('.','').upper()
-line3a = 'San Francisco, CA 94404'.replace(',','').upper()
-line3b = 'San Francisco, CA'.replace(',','').upper()
-a = AddressParser(line1,line2,line3a)
-b = AddressParser(line1,line2,line3b)
-repairer = AddressRepairer()
-repairer.add_good_address(a)
-print 'address a: ' + str(a.make_address())
-print 'address b: ' + str(b.make_address())
-repairer.repair_address(b)
-print 'repaired address b: ' + str(b.make_address())
-print a.make_address() == b.make_address()
+line1 = 'Santa Claus'.replace(',','').replace('.','').upper()
+line2 = 'Workshop'.replace(',','').replace('.','').upper()
+line3 = 'North Pole'.replace(',','').upper()
+a = AddressParser(line1,line2,line3)
+print a.name
+print a.street_num
+print a.street_name
+print a.street_type
+print a.city
+print a.state
+print a.federal_district
+print a.zip_code
