@@ -150,7 +150,7 @@ class CanonicalizedAddress(object):
             query = 'front'
             remainder = 'back'
         if key is 'apt_num':
-            re_list = [base_re(['.*', apt_type + '\s?','\d+']) for apt_type in APT_LIST]
+            re_list = [base_re(['.*', apt_type + '\s?', '\d+']) for apt_type in APT_LIST]
             query = 'back'
             remainder = 'front'
         if key is 'street_prefix':
@@ -247,13 +247,6 @@ class AddressRepairer(object):
         self.street_prefix_lookup = {}
         self.apt_num_lookup = {}
 
-    def filtered_list(self, address, map_filter):
-        return [address.address_data[item] for item in map_filter]
-
-    def filter_good_last_name(self, a):
-        return [a.address_data['name'].replace(a.address_data['name'].split(' ', 1)[0], '').strip(),
-                a.address_data['street_num'], a.address_data['street_name']]
-
     def add_good_address(self, parsed_address):
         self.good_addresses.append(parsed_address)
         self.apt_num_lookup[tuple(self.filtered_list(parsed_address, ['name', 'street_num', 'street_name']))] = [
@@ -261,6 +254,17 @@ class AddressRepairer(object):
         if parsed_address.address_data['street_prefix']:
             self.street_prefix_lookup[parsed_address.address_data['street_name']] = parsed_address.address_data[
                 'street_prefix']
+
+    # if there's nothing left to repair, then check for correctness
+    def correctness_check(self, parsed_address):
+        if parsed_address.address_data['street_name'] in self.street_prefix_lookup:
+            parsed_address.address_data['street_prefix'] = self.street_prefix_lookup[
+                parsed_address.address_data['street_name']]
+        apt_lookup = tuple(self.filtered_list(parsed_address, ['name', 'street_num', 'street_name']))
+        if apt_lookup in self.apt_num_lookup:
+            num, zip_code = self.apt_num_lookup[apt_lookup]
+            parsed_address.address_data['apt_num'] = num
+            parsed_address.address_data['zip_code'] = zip_code
 
     def repair_address(self, parsed_address):
         if parsed_address.has_no_zip():
@@ -297,13 +301,9 @@ class AddressRepairer(object):
         else:
             parsed_address.is_RTS = True
 
-    # if there's nothing left to repair, then check for correctness
-    def correctness_check(self, parsed_address):
-        if parsed_address.address_data['street_name'] in self.street_prefix_lookup:
-            parsed_address.address_data['street_prefix'] = self.street_prefix_lookup[
-                parsed_address.address_data['street_name']]
-        apt_lookup = tuple(self.filtered_list(parsed_address, ['name', 'street_num', 'street_name']))
-        if apt_lookup in self.apt_num_lookup:
-            num, zip_code = self.apt_num_lookup[apt_lookup]
-            parsed_address.address_data['apt_num'] = num
-            parsed_address.address_data['zip_code'] = zip_code
+    def filtered_list(self, address, map_filter):
+        return [address.address_data[item] for item in map_filter]
+
+    def filter_good_last_name(self, a):
+        return [a.address_data['name'].replace(a.address_data['name'].split(' ', 1)[0], '').strip(),
+                a.address_data['street_num'], a.address_data['street_name']]
