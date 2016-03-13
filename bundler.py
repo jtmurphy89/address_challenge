@@ -9,9 +9,10 @@ def bundle_mail(letters):
     - Every Letter is placed in exactly one Bundle
     - The destination of the Bundle matches the address of the Letter
     """
-    letter_queue = deque(
-        [(letter, AddressParser(letter.address.line1, letter.address.line2, letter.address.line3)) for letter in
-         letters])
+
+    letter_pile = [[letter, CanonicalizedAddress(letter.address.line1, letter.address.line2, letter.address.line3)] for
+                   letter in letters]
+    letter_queue = deque(sorted(letter_pile, cmp=lambda x, y: cmp(x[1].queue_score(), y[1].queue_score())))
     bundle_dict = {}
     repairer = AddressRepairer()
 
@@ -19,8 +20,7 @@ def bundle_mail(letters):
         letter, parsed_letter = letter_queue.popleft()
 
         if parsed_letter.is_good_egg():
-            # check for correctness of the address and produce a canonical form
-            # for it so we can find the corresponding bundle
+            # check for correctness of the address and produce a canonical form for it so we can find the corresponding bundle
             repairer.correctness_check(parsed_letter)
             standardized_address = parsed_letter.make_address()
             bundle = bundle_dict.get(standardized_address, Bundle(standardized_address))
@@ -29,8 +29,7 @@ def bundle_mail(letters):
             repairer.add_good_address(parsed_letter)
             print 'good egg: ' + str(letter.id) + ': ' + str(standardized_address)
         else:
-            # otherwise, attempt to retrieve missing information
-            # and place it at the back of the line
+            # otherwise, attempt to retrieve missing information and place it at the back of the line
             repairer.repair_address(parsed_letter)
             letter_queue.append((letter, parsed_letter))
 
@@ -42,8 +41,5 @@ def bundle_mail(letters):
             bundle.address = list(bundle.letters)[0].address
         l = [str(letter.id) for letter in bundle.letters]
         print l
-    print repairer.street_prefix_lookup
-    print repairer.apt_num_checker
-    print repairer.full_name_checker
 
     return bundle_dict.values()

@@ -1,43 +1,5 @@
 import re
 
-base_regex = '(?P<remainder>.*){junk}\s?(?P<base>{base_query})'
-street_num_regex = '(?P<street_num>\d+)\s(?P<remainder>.*)'
-apt_regex = '(?P<remainder>.*)\s{}\.?\s?(?P<apt_num>\d+)'
-zip_regex = '(?P<remainder>.*)\s(?P<zip_code>\d+)'
-
-apt_types = ['Suite', 'Ste', 'Room', 'Apartment', 'Apt', '#', 'Unit']
-street_types = ['Ave?n?u?e?', 'Pla?za?', 'Str?e?e?t?', 'Circ?l?e?', 'Terrace', 'Bo?u?le?va?r?d']
-state_list = ['CALIFORNIA', 'CA', 'NY', 'OREGON', 'OR']
-bad_names = ['POSTAL CUSTOMER', 'RESIDENT']
-
-name_prefixes = ['MR', 'MS', 'MRS']
-street_prefixes = ['NE', 'So?u?t?h?ea?s?t?']
-
-misspellings = {'KERNY': 'KEARNY'}
-
-name_dict = {'WILSON SONSINI GOODRICH  ROSATI': 'WSGR', 'DIAMOND JOE': 'JOE BIDEN',
-             'SAN FRANCISCO FIRE DEPARTMENT': 'SFFD', 'JIM SMITH': 'JAMES SMITH',
-             'MS LUNDS': 'JENNIFER LUNDS', 'THE WHITE HOUSE': 'BARACK OBAMA',
-             'MS WU': 'CELINE WU'}
-city_abbreviations = {'SF': 'SAN FRANCISCO'}
-
-state_dict = {'CALIFORNIA': 'CA', 'CA': 'CA', 'OREGON': 'OR', 'OR': 'OR', 'NEW YORK': 'NY', 'NY': 'NY'}
-street_dict = {'A': 'AVE', 'P': 'PLZ', 'S': 'ST', 'C': 'CIR', 'B': 'BLVD'}
-
-street_name_exceptions = {'THE WHITE HOUSE': '1600 PENNSYLVANIA AVE', 'EYE': 'I',
-                          'MARTIN LUTHER KING JUNIOR': 'MLK JR', 'MARTIN LUTHER KING JR': 'MLK JR',
-                          '5TH': 'FIFTH'}
-street_num_exceptions = {'ONE': '1', '5TH': 'FIFTH'}
-normal_junk = [',', '.']
-street_junk = ['NW']
-name_junk = ['INC', 'LLC', 'LLP', '&']
-
-
-def remove_junk(name, junk):
-    for piece_of_junk in junk:
-        name = name.replace(piece_of_junk, '').strip()
-    return name
-
 
 class Address(object):
     def __init__(self, line1, line2, line3):
@@ -99,236 +61,249 @@ RETURN_TO_SENDER = Address('RETURN_TO_SENDER',
 """ This special identifier is used in Level 3. See the INSTRUCTIONS.
 """
 
+# for basic parsing ability
+base_re = lambda x: '(?P<front>{front}){middle}(?P<back>{back})'.format(front=x[0], middle=x[1], back=x[2])
+
+# basic junk to remove from address
+junk = ['INC', 'LLC', 'LLP', '&', '.', ',']
+
+# basic address pieces as seen in data
+NAME_PREFIXES = ['MR', 'MS', 'MRS']
+AMBIGUOUS_NAMES = ['POSTAL CUSTOMER', 'RESIDENT']
+STREET_PREFIXES = ['NE', 'So?u?t?h?ea?s?t?', 'Po?s?t?\s?Of?f?i?c?e?\s?Box']
+STREET_TYPE_LIST = ['Ave?n?u?e?', 'Pla?za?', 'Str?e?e?t?', 'Circ?l?e?', 'Terrace', 'Bo?u?le?va?r?d']
+STREET_TYPE_DICT = {'A': 'AVE', 'P': 'PLZ', 'S': 'ST', 'C': 'CIR', 'B': 'BLVD'}
+STREET_SUFFIXES = ['NW']
+APT_LIST = ['Suite', 'Ste', 'Room', 'Apartment', 'Apt', '#', 'Unit']
+STATE_DICT = {'CALIFORNIA': 'CA', 'CA': 'CA', 'OREGON': 'OR', 'OR': 'OR', 'NEW YORK': 'NY', 'NY': 'NY'}
+
+# exceptions observed in data
+exceptions = {
+    'name': {'WILSON SONSINI GOODRICH  ROSATI': 'WSGR', 'DIAMOND JOE': 'JOE BIDEN',
+             'SAN FRANCISCO FIRE DEPARTMENT': 'SFFD', 'JIM SMITH': 'JAMES SMITH',
+             'THE WHITE HOUSE': 'BARACK OBAMA'},
+    'street_name': {'THE WHITE HOUSE': '1600 PENNSYLVANIA AVE', 'EYE': 'I',
+                    'MARTIN LUTHER KING JUNIOR': 'MLK JR', 'MARTIN LUTHER KING JR': 'MLK JR',
+                    '5TH': 'FIFTH', 'KERNY': 'KEARNY'},
+    'street_num': {'ONE': '1', '5TH': 'FIFTH'},
+    'street_type': {'A': 'AVE', 'P': 'PLZ', 'S': 'ST', 'C': 'CIR', 'B': 'BLVD'},
+    'city': {'SF': 'SAN FRANCISCO', 'WASHINGTON DC': ''},
+    'state': {'CALIFORNIA': 'CA', 'CA': 'CA', 'OREGON': 'OR', 'OR': 'OR', 'NEW YORK': 'NY', 'NY': 'NY'}
+}
+
 WHITE_HOUSE_ADDRESS = Address('BARACK OBAMA',
                               '1600 PENNSYLVANIA AVENUE',
                               'WASHINGTON DC 20500')
 
 
-class AddressParser(object):
+# for each item in the address pieces list,
+
+def handle_exceptions(key, data):
+    if key in exceptions:
+        data = data[0] if key is 'street_type' else data
+        return exceptions[key].get(data, data)
+    return data
+
+
+def remove_junk(name, junk):
+    for piece_of_junk in junk:
+        name = name.replace(piece_of_junk, '').strip()
+    return name
+
+
+class CanonicalizedAddress(object):
+    address_pieces = ['name', 'street_num', 'apt_num', 'street_prefix', 'street_suffix', 'street_type', 'street_name',
+                      'zip_code', 'federal_district', 'state', 'city']
+
     def __init__(self, line1, line2, line3):
-        self.line1remainder = remove_junk(line1.upper(), normal_junk + name_junk).strip()
-        self.line2remainder = remove_junk(line2.upper(), normal_junk + street_junk)
-        self.line3remainder = remove_junk(line3.upper(), normal_junk)
-
-        self.name = self.parse_name(self.line1remainder)
-        self.street_num = self.parse_street_num()
-        self.apt_num = self.parse_apt_num()
-        self.street_prefix = self.parse_street_prefix()
-        self.street_type, self.street_name = self.parse_street_type()
-        self.zip_code = self.parse_zip_code()
-        self.city, self.state, self.federal_district = self.parse_city_state_district()
+        self.line1 = remove_junk(line1.upper(), junk)
+        self.line2 = remove_junk(line2.upper(), junk)
+        self.line3 = remove_junk(line3.upper(), junk)
+        self.address_data = {addy_key: self.canonicalizer(addy_key) for addy_key in self.address_pieces}
         self.repair_attempts = 0
-        self.is_RTS = not self.zip_code and not self.state and not self.federal_district
-        self.is_white_house = self.name is 'BARACK OBAMA' or self.street_name is '1600 PENNSYLVANIA AVE'
+        self.is_RTS = not self.address_data['zip_code'] and not self.address_data['state'] and not self.address_data[
+            'federal_district']
+        self.is_white_house = True if self.address_data['name'] == 'BARACK OBAMA' else False
 
-    def parse_name(self, name):
-        if name in name_dict:
-            name = name_dict[name]
-            return name
-        return name
+    def canonicalizer(self, key):
+        parsed_data = ''
+        re_list = []
+        line_number = 3 if key in ['city', 'state', 'federal_district', 'zip_code'] else 2
+        query_line = self.line2 if line_number is 2 else self.line3
+        # this will flag which direction we are parsing with the regex
+        query = ''
+        remainder = ''
+        if key is 'name':
+            first_name = self.line1.split(' ', 1)[0]
+            short_name = self.line1.split(' ', 1)[1] if first_name in NAME_PREFIXES else self.line1
+            return handle_exceptions(key, short_name)
+        if key is 'city':
+            return handle_exceptions('city', self.line3)
+        if key is 'street_name':
+            return handle_exceptions('street_name', self.line2)
+        if key is 'federal_district':
+            if self.line3 == 'WASHINGTON DC':
+                parsed_data = self.line3
+            return parsed_data
+        if key is 'street_num':
+            re_list = [base_re(['\d+', '\s', '.*'])] + [base_re([blah, '\s', '.*']) for blah in ['ONE', '5TH', 'FIFTH']]
+            query = 'front'
+            remainder = 'back'
+        if key is 'apt_num':
+            re_list = [base_re(['.*', apt_type + '\s?','\d+']) for apt_type in APT_LIST]
+            query = 'back'
+            remainder = 'front'
+        if key is 'street_prefix':
+            re_list = [base_re([prefix, '\s', '.*']) for prefix in STREET_PREFIXES]
+            query = 'front'
+            remainder = 'back'
+        if key is 'street_suffix':
+            re_list = [base_re(['.*', '\s', suffix]) for suffix in STREET_SUFFIXES]
+            query = 'back'
+            remainder = 'front'
+        if key is 'street_type':
+            re_list = [base_re(['.*', '', st_type]) for st_type in STREET_TYPE_LIST]
+            query = 'back'
+            remainder = 'front'
+        if key is 'zip_code':
+            re_list = [base_re(['.*', '', '\d\d\d\d\d']) + '(?:-\d+)*']
+            query = 'back'
+            remainder = 'front'
+        if key is 'state':
+            re_list = [base_re(['.*', '\s', state]) for state in STATE_DICT]
+            query = 'back'
+            remainder = 'front'
+        # if we make it here, there should be at _most_ one match...
+        match = filter(None, [re.match(item, query_line, re.IGNORECASE) for item in re_list])
+        if match:
+            parsed_data = handle_exceptions(key, match[0].group(query).strip())
+            self.update_address_line(line_number, match[0].group(remainder).strip())
+        return parsed_data
 
-    def parse_street_num(self):
-        street_num = ''
-        street_num_match = re.match(street_num_regex, self.line2remainder, re.IGNORECASE)
-        if street_num_match:
-            street_num = street_num_match.group('street_num').strip()
-            street_num = street_num_exceptions.get(street_num, street_num)
-            self.line2remainder = street_num_match.group('remainder').strip()
-        else:
-            for key in street_num_exceptions:
-                street_num_match = re.match('(?P<street_num>{})\s(?P<remainder>.*)'.format(key), self.line2remainder,
-                                            re.IGNORECASE)
-                if street_num_match:
-                    street_num = street_num_match.group('street_num').strip()
-                    street_num = street_num_exceptions.get(street_num, street_num)
-                    self.line2remainder = street_num_match.group('remainder').strip()
-        return street_num
-
-    def parse_street_prefix(self):
-        street_prefix = ''
-        street_prefix_regex = '(?P<street_prefix>{})\s(?P<remainder>.*)'
-        for prefix in street_prefixes:
-            prefix_match = re.match(street_prefix_regex.format(prefix), self.line2remainder, re.IGNORECASE)
-            if prefix_match:
-                street_prefix = prefix_match.group('street_prefix')
-                self.line2remainder = prefix_match.group('remainder')
-                return street_prefix
-        return street_prefix
-
-    def parse_apt_num(self):
-        apt_num = ''
-        for apt_type in apt_types:
-            regex = base_regex.format(junk=apt_type, base_query='\d+')
-            regex_match = re.match(regex, self.line2remainder, re.IGNORECASE)
-            if regex_match:
-                apt_num = regex_match.group('base')
-                self.line2remainder = regex_match.group('remainder').strip()
-                return apt_num
-        return apt_num
-
-    def parse_street_type(self):
-        st_type = ''
-        street_name = self.line2remainder
-        for street_type in street_types:
-            regex = base_regex.format(junk='', base_query=street_type)
-            regex_match = re.match(regex, self.line2remainder, re.IGNORECASE)
-            if regex_match:
-                st_type = regex_match.group('base')
-                st_type = street_dict.get(st_type[0] if st_type else '', '')
-                # all we have left will be the street name
-                street_name = regex_match.group('remainder').strip()
-                # check for misspellings and aliases
-                street_name = misspellings.get(street_name, street_name)
-                street_name = street_name_exceptions.get(street_name, street_name)
-                return st_type, street_name
-        return st_type, street_name
-
-    def parse_zip_code(self):
-        zip_code = ''
-        zip_code_regex = '(?P<remainder>.*)(?P<base>\d\d\d\d\d)(?:-\d+)*'
-        zip_code_match = re.match(zip_code_regex, self.line3remainder, re.IGNORECASE)
-        if zip_code_match:
-            zip_code = zip_code_match.group('base')
-            self.line3remainder = zip_code_match.group('remainder').strip()
-        return zip_code
-
-    def parse_city_state_district(self):
-        # city/state/federal district
-        city = ''
-        st = ''
-        fed_disct = ''
-        for state in state_list:
-            regex = base_regex.format(junk='\s', base_query=state)
-            regex_match = re.match(regex, self.line3remainder, re.IGNORECASE)
-            if regex_match:
-                st = regex_match.group('base')
-                self.line3remainder = regex_match.group('remainder').strip()
-
-        if self.line3remainder == 'WASHINGTON DC':
-            fed_disct = 'WASHINGTON DC'
-        else:
-            city = city_abbreviations.get(self.line3remainder, self.line3remainder).strip()
-        return city, st, fed_disct
+    def update_address_line(self, line_num, line_remainder):
+        if line_num is 2:
+            self.line2 = line_remainder
+        if line_num is 3:
+            self.line3 = line_remainder
 
     def make_address(self):
+        # this is a little hairy...
         if self.is_RTS:
             return RETURN_TO_SENDER
         if self.is_white_house:
             return WHITE_HOUSE_ADDRESS
-        line1 = self.name.strip()
-        line2 = str(self.street_num + ' ' + self.street_prefix).strip() + ' ' + str(
-            self.street_name + ' ' + self.street_type + ' ' + self.apt_num).strip()
-        line3 = str(self.city + ' ' + state_dict.get(self.state, '') +
-                    ' ' + self.federal_district + ' ' + self.zip_code).strip()
-        return Address(line1, line2, line3)
+        line1 = self.address_data['name']
+        line2a = self.address_data['street_num'] + ' ' + self.address_data['street_prefix']
+        line2b = self.address_data['street_name'] + ' ' + self.address_data['street_type'] + ' ' + self.address_data[
+            'apt_num']
+        line3a = self.address_data['city'] + ' ' + self.address_data['state'] + ' ' + self.address_data[
+            'federal_district']
+        line3b = self.address_data['zip_code']
+        line2 = line2a.strip() + ' ' + line2b.strip()
+        line3 = line3a.strip() + ' ' + line3b.strip()
+        return Address(line1, line2.strip(), line3.strip())
+
+    def has_bad_state_fd(self):
+        return self.address_data['zip_code'] and not self.address_data['state'] and not self.address_data[
+            'federal_district']
+
+    def has_no_zip(self):
+        return not self.address_data['zip_code']
+
+    def has_ambiguous_name(self):
+        return self.address_data['name'] in AMBIGUOUS_NAMES
+
+    def has_no_street_type(self):
+        return not self.address_data['street_type']
 
     def has_name_prefix(self):
-        name_chunk = self.name.split(' ')[0]
-        for prefix in name_prefixes:
-            if prefix is name_chunk:
-                return True
-        return False
+        return self.line1.split(' ', 1)[0] in NAME_PREFIXES
+
+    def is_lost_cause(self):
+        return self.repair_attempts > 10
+
+    def queue_score(self):
+        score = len(filter(lambda x: x == '', self.address_data.items()))
+        return score + 1 if self.has_name_prefix() else score
 
     def is_good_egg(self):
-        if self.is_RTS or self.is_white_house:
+        if self.is_lost_cause() or self.is_RTS or self.is_white_house:
             return True
-        # make sure we eventually give up trying to repair the address
-        if self.repair_attempts > 100:
-            return True
-        if not self.zip_code:
-            return False
-        if self.zip_code and not self.state and not self.federal_district:
-            return False
-        if self.name in bad_names:
-            return False
-        if not self.street_type:
+        is_bad_egg = (self.has_bad_state_fd() or self.has_no_zip() or self.has_ambiguous_name() or
+                      self.has_no_street_type() or self.has_name_prefix())
+        if is_bad_egg:
             return False
         return True
 
 
 class AddressRepairer(object):
+    zip_filter = ['city', 'state', 'federal_district', 'street_name']
+    city_st_fd_filter = ['zip_code']
+    name_filter = ['street_num', 'street_name']
+    street_type_filter = ['street_num', 'street_name']
+
     def __init__(self):
         self.good_addresses = []
-        self.apt_num_checker = {}
-        self.zip_checker = {}
-        self.full_name_checker = {}
-        self.multiple_rooms_checker = {}
-        self.city_state_fd_checker = {}
         self.street_prefix_lookup = {}
+        self.apt_num_lookup = {}
+
+    def filtered_list(self, address, map_filter):
+        return [address.address_data[item] for item in map_filter]
+
+    def filter_good_last_name(self, a):
+        return [a.address_data['name'].replace(a.address_data['name'].split(' ', 1)[0], '').strip(),
+                a.address_data['street_num'], a.address_data['street_name']]
 
     def add_good_address(self, parsed_address):
         self.good_addresses.append(parsed_address)
-        street_key = (parsed_address.name, parsed_address.street_num, parsed_address.street_name)
-        zip_key = (
-            parsed_address.city, parsed_address.state, parsed_address.federal_district, parsed_address.street_name)
-        multiple_rooms_key = (parsed_address.street_num, parsed_address.street_name)
-        self.apt_num_checker[street_key] = [parsed_address.apt_num, parsed_address.zip_code]
-        self.zip_checker[zip_key] = parsed_address.zip_code
-        self.multiple_rooms_checker[multiple_rooms_key] = False if not parsed_address.apt_num else True
-        self.city_state_fd_checker[parsed_address.zip_code] = [parsed_address.city, parsed_address.state,
-                                                               parsed_address.federal_district]
-        if parsed_address.street_prefix:
-            self.street_prefix_lookup[parsed_address.street_name] = parsed_address.street_prefix
-        if len(parsed_address.name.split()) > 1:
-            self.full_name_checker[parsed_address.name.split()[1]] = parsed_address.name
+        self.apt_num_lookup[tuple(self.filtered_list(parsed_address, ['name', 'street_num', 'street_name']))] = [
+            parsed_address.address_data['apt_num'], parsed_address.address_data['zip_code']]
+        if parsed_address.address_data['street_prefix']:
+            self.street_prefix_lookup[parsed_address.address_data['street_name']] = parsed_address.address_data[
+                'street_prefix']
 
     def repair_address(self, parsed_address):
-        if not parsed_address.zip_code:
-            self.repair_zip(parsed_address)
-        elif parsed_address.zip_code and not parsed_address.city and not parsed_address.federal_district:
-            self.repair_city_state_fd(parsed_address)
-        elif parsed_address.has_name_prefix() or parsed_address.name in bad_names:
-            self.repair_name(parsed_address)
-        elif not parsed_address.street_type:
-            self.repair_street_type(parsed_address)
-
-    def repair_zip(self, parsed_address):
-        # we need city, state, federal district and street name to match up
-        zip_key = (
-            parsed_address.city, parsed_address.state, parsed_address.federal_district, parsed_address.street_name)
-        if zip_key in self.zip_checker:
-            parsed_address.zip_code = self.zip_checker[zip_key]
+        if parsed_address.has_no_zip():
+            self.repair_address_part(parsed_address, 'zip_code', self.zip_filter)
+        elif parsed_address.has_bad_state_fd():
+            self.repair_address_part(parsed_address, 'city', self.city_st_fd_filter)
+            self.repair_address_part(parsed_address, 'state', self.city_st_fd_filter)
+            self.repair_address_part(parsed_address, 'federal_district', self.city_st_fd_filter)
+        elif parsed_address.has_name_prefix():
+            self.repair_name_prefix(parsed_address)
+        elif parsed_address.has_ambiguous_name():
+            self.repair_ambiguous_name(parsed_address)
+        elif parsed_address.has_no_street_type():
+            self.repair_address_part(parsed_address, 'street_type', self.street_type_filter)
         parsed_address.repair_attempts += 1
 
-    def repair_city_state_fd(self, parsed_address):
-        # we need zip code to match up
-        key = parsed_address.zip_code
-        if key in self.city_state_fd_checker:
-            city, state, fd = self.city_state_fd_checker[key]
-            parsed_address.city = city
-            parsed_address.state = state
-            parsed_address.federal_district = fd
-        parsed_address.repair_attempts += 1
+    def repair_address_part(self, parsed_address, key, filter_type):
+        repair_key = self.filtered_list(parsed_address, filter_type)
+        query_set = [self.filtered_list(good_addy, filter_type) for good_addy in self.good_addresses]
+        if repair_key in query_set:
+            parsed_address.address_data[key] = self.good_addresses[query_set.index(repair_key)].address_data[key]
 
-    def repair_name(self, parsed_address):
-        # we need to lookup last names if they have a prefix
-        name_key = remove_junk(parsed_address.name, name_prefixes).split()
-        print name_key
-        rooms_key = (parsed_address.street_num, parsed_address.street_name)
-        if parsed_address.has_name_prefix() and name_key in self.full_name_checker:
-            parsed_address.name = self.full_name_checker[name_key]
+    def repair_name_prefix(self, parsed_address):
+        repair_key = [parsed_address.address_data[item] for item in ['name'] + self.name_filter]
+        query_set = [self.filter_good_last_name(addy) for addy in self.good_addresses]
+        if repair_key in query_set:
+            parsed_address.address_data['name'] = self.good_addresses[query_set.index(repair_key)].address_data['name']
+
+    def repair_ambiguous_name(self, parsed_address):
+        repair_key = parsed_address.make_address().line2
+        query_set = [a.make_address().line2 for a in self.good_addresses]
+        if repair_key in query_set:
+            parsed_address.address_data['name'] = self.good_addresses[query_set.index(repair_key)].address_data['name']
         else:
-            if rooms_key in self.multiple_rooms_checker and not parsed_address.apt_num:
-                parsed_address.is_RTS = True
-            for good_address in self.good_addresses:
-                if parsed_address.make_address().line2 == good_address.make_address().line2:
-                    parsed_address.name = good_address.name
-        parsed_address.repair_attempts += 1
-
-    def repair_street_type(self, parsed_address):
-        for good_address in self.good_addresses:
-            match = (parsed_address.street_num == good_address.street_num and
-                     parsed_address.street_name == good_address.street_name)
-            if match:
-                parsed_address.street_type = good_address.street_type
-        parsed_address.repair_attempts += 1
+            parsed_address.is_RTS = True
 
     # if there's nothing left to repair, then check for correctness
     def correctness_check(self, parsed_address):
-        if parsed_address.street_name in self.street_prefix_lookup:
-            parsed_address.street_prefix = self.street_prefix_lookup[parsed_address.street_name]
-        apt_num_lookup = (parsed_address.name, parsed_address.street_num, parsed_address.street_name)
-        if apt_num_lookup in self.apt_num_checker:
-            apt_num, zip_code = self.apt_num_checker[apt_num_lookup]
-            parsed_address.apt_num = apt_num
-            parsed_address.zip_code = zip_code
+        if parsed_address.address_data['street_name'] in self.street_prefix_lookup:
+            parsed_address.address_data['street_prefix'] = self.street_prefix_lookup[
+                parsed_address.address_data['street_name']]
+        apt_lookup = tuple(self.filtered_list(parsed_address, ['name', 'street_num', 'street_name']))
+        if apt_lookup in self.apt_num_lookup:
+            num, zip_code = self.apt_num_lookup[apt_lookup]
+            parsed_address.address_data['apt_num'] = num
+            parsed_address.address_data['zip_code'] = zip_code

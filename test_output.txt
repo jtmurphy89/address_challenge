@@ -1,9 +1,5 @@
-JOE BIDEN
-1
-
-OBSERVATORY
-CIR
-
-
-WASHINGTON DC
-20008
+False
+BARACK OBAMA
+True
+{'city': '', 'name': 'BARACK OBAMA', 'street_name': '', 'street_suffix': '', 'state': '', 'street_type': '', 'federal_district': 'WASHINGTON DC', 'street_prefix': '', 'street_num': '', 'zip_code': '', 'apt_num': ''}
+BARACK OBAMA		WASHINGTON DC
