@@ -27,7 +27,6 @@ def bundle_mail(letters):
             bundle.add_letter(letter)
             bundle_dict[standardized_address] = bundle
             repairer.add_good_address(parsed_letter)
-            print 'good egg: ' + str(letter.id) + ': ' + str(standardized_address)
         else:
             # otherwise, attempt to retrieve missing information and place it at the back of the line
             repairer.repair_address(parsed_letter)
@@ -39,7 +38,5 @@ def bundle_mail(letters):
     for bundle in bundle_dict.values():
         if bundle.address is not RETURN_TO_SENDER:
             bundle.address = list(bundle.letters)[0].address
-        l = [str(letter.id) for letter in bundle.letters]
-        print l
 
     return bundle_dict.values()
